@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  ref_id: 1
+  ref_type: MyString
+  tsvector: 
+  tsvector: 
+
+two:
+  ref_id: 1
+  ref_type: MyString
+  tsvector: 
+  tsvector: 

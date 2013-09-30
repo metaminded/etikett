@@ -1,0 +1,2 @@
+module Etikett::TagsHelper
+end
