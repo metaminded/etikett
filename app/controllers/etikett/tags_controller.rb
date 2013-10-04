@@ -6,7 +6,8 @@ class Etikett::TagsController < ApplicationController
       @etiketts = Etikett::Tag.joins(:tag_objects).
         where("etikett_tag_objects.taggable_id IN (?) and etikett_tag_objects.taggable_type = ?",params[:taggable_id], CGI::unescape(params[:taggable_type])).
         group("etikett_tags.id").
-        having("COUNT(etikett_tags.id) = ?", params[:taggable_id].count)
+        having("COUNT(etikett_tags.id) = ?", params[:taggable_id].count).
+        order("generated desc, name asc")
     else
       @etiketts = Etikett::Tag.all
     end
