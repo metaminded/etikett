@@ -9,8 +9,12 @@ module Etikett
     def create_valid_tag_name!
       i = 0
       until(valid? || !errors.include?(:name)) do
-          self.name = "#{self.name}_#{i}"
-          i += 1
+        scanned_name = self.name.scan(/\A(.+_)(\d+)\z/).flatten
+        if scanned_name.any?
+          self.name = [scanned_name[0], (scanned_name[1].to_i + 1)].join
+        else
+          self.name = "#{self.name}_0"
+        end
       end
     end
 
