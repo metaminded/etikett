@@ -4,7 +4,7 @@ module Etikett
     extend ActiveSupport::Concern
 
     included do
-      has_many :tag_objects, as: :taggable, class_name: 'Etikett::TagObject'
+      has_many :tag_objects, as: :taggable, class_name: 'Etikett::TagObject', dependent: :destroy
       has_many :tags, through: :tag_objects, class_name: 'Etikett::Tag'
       after_create :create_automated_tag
 
