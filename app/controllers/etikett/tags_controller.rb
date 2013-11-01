@@ -9,14 +9,14 @@ class Etikett::TagsController < ApplicationController
           group("etikett_tags.id").
           having("COUNT(etikett_tags.id) = ?", Array(params[:taggable_id]).count).
           order("generated desc, name asc")
-        if params[:tag_type_id]
-          @etiketts = @etiketts.joins(:tag_type).where('etikett_tag_types.id = ?', params[:tag_type_id])
-        end
       else
         @etiketts = Etikett::Tag.none
       end
     else
       @etiketts = Etikett::Tag.all
+    end
+    if params[:tag_type_id]
+      @etiketts = @etiketts.joins(:tag_type).where('etikett_tag_types.id = ?', params[:tag_type_id])
     end
   end
 
