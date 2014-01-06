@@ -5,7 +5,8 @@ class TagChooserInput < SimpleForm::Inputs::Base
       id: object.id,
       tag_type: options[:tag_type],
       input_class: attribute_name,
-      tag_chooser: true
+      tag_chooser: true,
+      href: Rails.application.routes.url_helpers.etikett_tags_path
     }
     input_html_options[:value] = object.public_send(reflection.name).map do |t|
       {id: t.id, text: t.name, locked: false}
