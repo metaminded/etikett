@@ -11,7 +11,9 @@ module Etikett
       def create_automated_tag
         settings = self.class.tag_config.call(self)
         settings[:sid] ||= "tag:#{self.id}"
-        t = Etikett::Tag.new(name: settings[:sid], nice: settings[:nice], generated: true)
+        t = Etikett::Tag.new(name: settings[:sid], nice: settings[:nice],
+            generated: true, tag_type: settings[:tag_type]
+        )
         t.create_valid_tag_name!
         ActiveRecord::Base.transaction do
           t.save
