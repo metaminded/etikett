@@ -17,13 +17,17 @@ module Etikett
         t.create_valid_tag_name!
         ActiveRecord::Base.transaction do
           t.save
-          to = Etikett::TagObject.create(tag: t, taggable: self)
+          to = Etikett::TagObject.create(tag: t, taggable: self, prime: true)
         end
       end
 
       def navigate_to
         t = Etikett::Tag.where(taggable: self)
         t.get_path
+      end
+
+      def prime_tag
+        Etikett::Tag.joins(:tag_objects).find_by(etikett_tag_objects: {taggable_id: self, taggable_type: self.class, prime: true})
       end
 
     end

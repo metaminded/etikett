@@ -41,8 +41,31 @@ module Etikett
       query
     end
 
-    def to_json
-      {id: id, title: name}
+    def self.fetch params
+      if params.include? :query
+        etiketts = Etikett::Tag.search(params)
+      elsif params.include?(:taggable_type)
+        if params[:taggable_id].present?
+          etiketts = Etikett::Tag.joins(:tag_objects).
+            where("etikett_tag_objects.taggable_id IN (?) and etikett_tag_objects.taggable_type = ?",params[:taggable_id], CGI::unescape(params[:taggable_type])).
+            group("etikett_tags.id").
+            having("COUNT(etikett_tags.id) = ?", Array(params[:taggable_id]).count).
+            order("generated desc, name asc")
+        else
+          etiketts = Etikett::Tag.none
+        end
+      else
+        etiketts = Etikett::Tag.all
+      end
+      if params[:tag_type_id]
+        etiketts = etiketts.joins(:tag_type).where('etikett_tag_types.id = ?', params[:tag_type_id])
+      end
+      etiketts
+    end
+
+    def is_prime_for? taggable_type, taggable_id
+      Etikett::TagObject.find_by(taggable_type: taggable_type,
+        taggable_id: taggable_id, prime: true, tag: self).present?
     end
   end
 end
