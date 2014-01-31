@@ -57,8 +57,8 @@ module Etikett
       else
         etiketts = Etikett::Tag.all
       end
-      if params[:tag_type_id]
-        etiketts = etiketts.joins(:tag_type).where('etikett_tag_types.id = ?', params[:tag_type_id])
+      if params[:tag_type_name]
+        etiketts = etiketts.joins(:tag_type).where('etikett_tag_types.name = ?', params[:tag_type_name])
       end
       etiketts
     end

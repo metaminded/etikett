@@ -52,6 +52,6 @@ class Etikett::TagsController < ApplicationController
 
   private
   def tag_params
-    params.require(:tag).permit(:name, :tag_type_id)
+    params.require(:tag).permit(:name, :tag_type_name)
   end
 end
