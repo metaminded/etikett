@@ -19,6 +19,7 @@ class Etikett::TagsController < ApplicationController
       #   @tag.tag_categories << Etikett::TagCategory.find(params[:category_id])
       # end
       @tag = Etikett::Tag.new(tag_params)
+      @tag.tag_type = Etikett::TagType[@tag.tag_type_name]
       @tag.save
       if params[:taggable_id]
         params[:taggable_id].each do |taggable_id|

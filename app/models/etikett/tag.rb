@@ -10,6 +10,8 @@ module Etikett
 
     validates :name, uniqueness: true
 
+    attr_accessor :tag_type_name
+
     def create_valid_tag_name!
       i = 0
       until(valid? || !errors.include?(:name)) do
