@@ -3,7 +3,6 @@ class TagInput < SimpleForm::Inputs::Base
     data = {
       class: object.class.name,
       id: object.id,
-      tag_type: options[:tag_type],
       input_class: attribute_name,
       tag_chooser: true,
       href: Rails.application.routes.url_helpers.etikett_tags_path

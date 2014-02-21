@@ -1,0 +1,174 @@
+  [1m[36m (66.0ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) [0m
+  [1m[35m (18.1ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateUsers (20140221084358)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (17.3ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "first_name" character varying(255), "last_name" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (1.4ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140221084358"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+Migrating to CreatePosts (20140221084505)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (3.3ms)[0m  [1mCREATE TABLE "posts" ("id" serial primary key, "user_id" integer, "title" character varying(255), "comment" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.8ms)[0m  CREATE INDEX "index_posts_on_user_id" ON "posts" ("user_id")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221084505"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateArticles (20140221094329)
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36m (3.5ms)[0m  [1mCREATE TABLE "articles" ("id" serial primary key, "product_no" integer, "title" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (0.7ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140221094329"]]
+  [1m[36m (1.5ms)[0m  [1mCOMMIT[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.2ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.2ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (31.8ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) [0m
+  [1m[35m (50.2ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateUsers (20140221084358)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (6.8ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "first_name" character varying(255), "last_name" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140221084358"]]
+  [1m[36m (45.1ms)[0m  [1mCOMMIT[0m
+Migrating to CreatePosts (20140221084505)
+  [1m[35m (0.3ms)[0m  BEGIN
+  [1m[36m (12.0ms)[0m  [1mCREATE TABLE "posts" ("id" serial primary key, "user_id" integer, "title" character varying(255), "comment" text, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.1ms)[0m  CREATE INDEX "index_posts_on_user_id" ON "posts" ("user_id")
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221084505"]]
+  [1m[35m (12.0ms)[0m  COMMIT
+Migrating to CreateArticles (20140221094329)
+  [1m[36m (0.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (3.1ms)[0m  CREATE TABLE "articles" ("id" serial primary key, "product_no" integer, "title" character varying(255), "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221094329"]]
+  [1m[35m (14.8ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.3ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"
+  [1m[36m (6.1ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) [0m
+  [1m[35m (4.4ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mEtikett::Tag Load (0.4ms)[0m  [1mSELECT "etikett_tags".* FROM "etikett_tags"[0m
+PG::UndefinedTable: ERROR:  relation "etikett_tags" does not exist
+LINE 1: SELECT "etikett_tags".* FROM "etikett_tags"
+                                     ^
+: SELECT "etikett_tags".* FROM "etikett_tags"
+  [1m[36m (2.7ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) [0m
+  [1m[35m (1.5ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateEtikettTags (20140221145100)
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36m (30.0ms)[0m  [1mCREATE TABLE "etikett_tags" ("id" serial primary key, "name" character varying(255), "generated" boolean DEFAULT 'f', "nice" character varying(255), "prime_id" integer, "prime_type" character varying(255), "type" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (0.9ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140221145100"]]
+  [1m[36m (0.9ms)[0m  [1mCOMMIT[0m
+Migrating to CreateEtikettTagSynonyms (20140221145101)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (2.5ms)[0m  [1mCREATE TABLE "etikett_tag_synonyms" ("id" serial primary key, "name" character varying(255), "tag_id" integer, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.8ms)[0m  CREATE INDEX "index_etikett_tag_synonyms_on_tag_id" ON "etikett_tag_synonyms" ("tag_id")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145101"]]
+  [1m[35m (0.6ms)[0m  COMMIT
+Migrating to CreateEtikettTagCategories (20140221145102)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (2.1ms)[0m  CREATE TABLE "etikett_tag_categories" ("id" serial primary key, "name" character varying(255), "parent_category_id" integer, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (0.8ms)[0m  [1mCREATE INDEX "index_etikett_tag_categories_on_parent_category_id" ON "etikett_tag_categories" ("parent_category_id")[0m
+  [1m[35m (2.0ms)[0m  CREATE TABLE "etikett_tag_categories_tags" ("id" serial primary key, "tag_id" integer, "tag_category_id" integer, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145102"]]
+  [1m[35m (0.8ms)[0m  COMMIT
+Migrating to CreateExtensionPgTrgm (20140221145103)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (203.4ms)[0m  CREATE EXTENSION pg_trgm;
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145103"]]
+  [1m[35m (1.8ms)[0m  COMMIT
+Migrating to CreateEtikettSearchables (20140221145104)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (4.3ms)[0m  CREATE TABLE "etikett_searchables" ("id" serial primary key, "ref_id" integer, "ref_type" character varying(255), "short" tsvector, "fulltext" tsvector, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145104"]]
+  [1m[35m (0.7ms)[0m  COMMIT
+Migrating to AddGermanDictionary (20140221145105)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (1.2ms)[0m  CREATE TEXT SEARCH CONFIGURATION de_config (copy=german);
+  [1m[36m (121.5ms)[0m  [1mCREATE TEXT SEARCH DICTIONARY german_stem ( TEMPLATE = snowball, Language = german, StopWords = german); [0m
+  [1m[35m (485.3ms)[0m  CREATE TEXT SEARCH DICTIONARY german_ispell (TEMPLATE = ispell, dictfile = de_DE_frami,afffile = de_DE_frami,StopWords = german);
+  [1m[36m (24.1ms)[0m  [1malter text search configuration de_config alter mapping for asciiword WITH german_ispell, german_stem;[0m
+  [1m[35mSQL (0.3ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140221145105"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+Migrating to CreateEtikettTagMappings (20140221145106)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (26.7ms)[0m  [1mCREATE TABLE "etikett_tag_mappings" ("id" serial primary key, "taggable_id" integer, "taggable_type" character varying(255), "tag_id" integer, "type" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.9ms)[0m  CREATE INDEX "index_etikett_tag_mappings_on_tag_id" ON "etikett_tag_mappings" ("tag_id")
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145106"]]
+  [1m[35m (0.9ms)[0m  COMMIT
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+  [1m[36mEtikett::Tag Load (0.8ms)[0m  [1mSELECT "etikett_tags".* FROM "etikett_tags" ORDER BY "etikett_tags"."id" DESC LIMIT 1[0m
+  [1m[35mEtikett::TagMapping Load (0.6ms)[0m  SELECT "etikett_tag_mappings".* FROM "etikett_tag_mappings" ORDER BY "etikett_tag_mappings"."id" DESC LIMIT 1
+PG::UndefinedTable: ERROR:  relation "articles" does not exist
+LINE 5:                WHERE a.attrelid = '"articles"'::regclass
+                                          ^
+:               SELECT a.attname, format_type(a.atttypid, a.atttypmod),
+                     pg_get_expr(d.adbin, d.adrelid), a.attnotnull, a.atttypid, a.atttypmod
+                FROM pg_attribute a LEFT JOIN pg_attrdef d
+                  ON a.attrelid = d.adrelid AND a.attnum = d.adnum
+               WHERE a.attrelid = '"articles"'::regclass
+                 AND a.attnum > 0 AND NOT a.attisdropped
+               ORDER BY a.attnum
+
+  [1m[36m (15.1ms)[0m  [1mCREATE TABLE "schema_migrations" ("version" character varying(255) NOT NULL) [0m
+  [1m[35m (5.4ms)[0m  CREATE UNIQUE INDEX "unique_schema_migrations" ON "schema_migrations" ("version")
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1mSELECT "schema_migrations".* FROM "schema_migrations"[0m
+Migrating to CreateEtikettTags (20140221145100)
+  [1m[35m (0.1ms)[0m  BEGIN
+  [1m[36m (5.0ms)[0m  [1mCREATE TABLE "etikett_tags" ("id" serial primary key, "name" character varying(255), "generated" boolean DEFAULT 'f', "nice" character varying(255), "prime_id" integer, "prime_type" character varying(255), "type" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (0.8ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140221145100"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+Migrating to CreateEtikettTagSynonyms (20140221145101)
+  [1m[35m (0.2ms)[0m  BEGIN
+  [1m[36m (2.4ms)[0m  [1mCREATE TABLE "etikett_tag_synonyms" ("id" serial primary key, "name" character varying(255), "tag_id" integer, "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (0.9ms)[0m  CREATE INDEX "index_etikett_tag_synonyms_on_tag_id" ON "etikett_tag_synonyms" ("tag_id")
+  [1m[36mSQL (0.3ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145101"]]
+  [1m[35m (0.8ms)[0m  COMMIT
+Migrating to CreateEtikettTagCategories (20140221145102)
+  [1m[36m (0.5ms)[0m  [1mBEGIN[0m
+  [1m[35m (2.2ms)[0m  CREATE TABLE "etikett_tag_categories" ("id" serial primary key, "name" character varying(255), "parent_category_id" integer, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (1.1ms)[0m  [1mCREATE INDEX "index_etikett_tag_categories_on_parent_category_id" ON "etikett_tag_categories" ("parent_category_id")[0m
+  [1m[35m (2.1ms)[0m  CREATE TABLE "etikett_tag_categories_tags" ("id" serial primary key, "tag_id" integer, "tag_category_id" integer, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145102"]]
+  [1m[35m (0.8ms)[0m  COMMIT
+Migrating to CreateExtensionPgTrgm (20140221145103)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (9.0ms)[0m  CREATE EXTENSION pg_trgm;
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145103"]]
+  [1m[35m (1.7ms)[0m  COMMIT
+Migrating to CreateEtikettSearchables (20140221145104)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (3.3ms)[0m  CREATE TABLE "etikett_searchables" ("id" serial primary key, "ref_id" integer, "ref_type" character varying(255), "short" tsvector, "fulltext" tsvector, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (0.2ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145104"]]
+  [1m[35m (0.6ms)[0m  COMMIT
+Migrating to AddGermanDictionary (20140221145105)
+  [1m[36m (0.3ms)[0m  [1mBEGIN[0m
+  [1m[35m (1.0ms)[0m  CREATE TEXT SEARCH CONFIGURATION de_config (copy=german);
+  [1m[36m (1.3ms)[0m  [1mCREATE TEXT SEARCH DICTIONARY german_stem ( TEMPLATE = snowball, Language = german, StopWords = german); [0m
+  [1m[35m (602.5ms)[0m  CREATE TEXT SEARCH DICTIONARY german_ispell (TEMPLATE = ispell, dictfile = de_DE_frami,afffile = de_DE_frami,StopWords = german);
+  [1m[36m (3.4ms)[0m  [1malter text search configuration de_config alter mapping for asciiword WITH german_ispell, german_stem;[0m
+  [1m[35mSQL (1.2ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140221145105"]]
+  [1m[36m (4.4ms)[0m  [1mCOMMIT[0m
+Migrating to CreateEtikettTagMappings (20140221145106)
+  [1m[35m (2.6ms)[0m  BEGIN
+  [1m[36m (4.2ms)[0m  [1mCREATE TABLE "etikett_tag_mappings" ("id" serial primary key, "taggable_id" integer, "taggable_type" character varying(255), "tag_id" integer, "type" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35m (1.6ms)[0m  CREATE INDEX "index_etikett_tag_mappings_on_tag_id" ON "etikett_tag_mappings" ("tag_id")
+  [1m[36mSQL (3.4ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145106"]]
+  [1m[35m (4.7ms)[0m  COMMIT
+Migrating to CreateArticles (20140221145407)
+  [1m[36m (3.8ms)[0m  [1mBEGIN[0m
+  [1m[35m (3.0ms)[0m  CREATE TABLE "articles" ("id" serial primary key, "product_no" integer, "title" character varying(255), "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36mSQL (4.7ms)[0m  [1mINSERT INTO "schema_migrations" ("version") VALUES ($1)[0m  [["version", "20140221145407"]]
+  [1m[35m (1.4ms)[0m  COMMIT
+Migrating to CreatePosts (20140221145428)
+  [1m[36m (0.2ms)[0m  [1mBEGIN[0m
+  [1m[35m (7.2ms)[0m  CREATE TABLE "posts" ("id" serial primary key, "user_id" integer, "title" character varying(255), "comment" text, "created_at" timestamp, "updated_at" timestamp) 
+  [1m[36m (1.0ms)[0m  [1mCREATE INDEX "index_posts_on_user_id" ON "posts" ("user_id")[0m
+  [1m[35mSQL (1.0ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140221145428"]]
+  [1m[36m (0.7ms)[0m  [1mCOMMIT[0m
+Migrating to CreateUsers (20140221145440)
+  [1m[35m (4.8ms)[0m  BEGIN
+  [1m[36m (4.7ms)[0m  [1mCREATE TABLE "users" ("id" serial primary key, "first_name" character varying(255), "last_name" character varying(255), "created_at" timestamp, "updated_at" timestamp) [0m
+  [1m[35mSQL (0.9ms)[0m  INSERT INTO "schema_migrations" ("version") VALUES ($1)  [["version", "20140221145440"]]
+  [1m[36m (3.4ms)[0m  [1mCOMMIT[0m
+  [1m[35mActiveRecord::SchemaMigration Load (0.5ms)[0m  SELECT "schema_migrations".* FROM "schema_migrations"

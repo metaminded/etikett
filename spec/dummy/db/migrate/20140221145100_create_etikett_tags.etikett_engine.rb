@@ -1,3 +1,4 @@
+# This migration comes from etikett_engine (originally 20130923104509)
 class CreateEtikettTags < ActiveRecord::Migration
   def change
     create_table :etikett_tags do |t|

@@ -1,16 +1,12 @@
 module Etikett
   class Tag < ActiveRecord::Base
     has_and_belongs_to_many :tag_categories
-    has_many :tag_objects, class_name: 'Etikett::TagObject'
-    has_many :tag_synonyms
+    has_many :tag_mappings, class_name: 'Etikett::TagMapping', dependent: :destroy
+    has_many :tag_synonyms, dependent: :destroy
 
-    has_many :courses, through: :tag_objects, source: :taggable, source_type: 'Course'
-
-    belongs_to :tag_type
+    belongs_to :prime, polymorphic: true
 
     validates :name, uniqueness: true
-
-    attr_accessor :tag_type_name
 
     def create_valid_tag_name!
       i = 0
@@ -48,8 +44,8 @@ module Etikett
         etiketts = Etikett::Tag.search(params)
       elsif params.include?(:taggable_type)
         if params[:taggable_id].present?
-          etiketts = Etikett::Tag.joins(:tag_objects).
-            where("etikett_tag_objects.taggable_id IN (?) and etikett_tag_objects.taggable_type = ?",params[:taggable_id], CGI::unescape(params[:taggable_type])).
+          etiketts = Etikett::Tag.joins(:tag_mappings).
+            where("etikett_tag_mappings.taggable_id IN (?) and etikett_tag_mappings.taggable_type = ?",params[:taggable_id], CGI::unescape(params[:taggable_type])).
             group("etikett_tags.id").
             having("COUNT(etikett_tags.id) = ?", Array(params[:taggable_id]).count).
             order("generated desc, name asc")
@@ -59,15 +55,14 @@ module Etikett
       else
         etiketts = Etikett::Tag.all
       end
-      if params[:tag_type_name]
-        etiketts = etiketts.joins(:tag_type).where('etikett_tag_types.name = ?', params[:tag_type_name])
-      end
+      # if params[:tag_type_name]
+      #   etiketts = etiketts.joins(:tag_type).where('etikett_tag_types.name = ?', params[:tag_type_name])
+      # end
       etiketts
     end
 
-    def is_prime_for? taggable_type, taggable_id
-      Etikett::TagObject.find_by(taggable_type: taggable_type,
-        taggable_id: taggable_id, prime: true, tag: self).present?
+    def is_prime_for? obj_type, obj_id
+      prime_type == obj_type && prime_id == obj_id
     end
   end
 end

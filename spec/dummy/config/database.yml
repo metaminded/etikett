@@ -1,0 +1,23 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: etikett_dev
+  pool: 5
+  host: localhost
+  min_messages: WARNING
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: etikett_test
+  pool: 5
+  host: localhost
+  min_messages: WARNING
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: etikett_prod
+  pool: 5
+  host: localhost
+  min_messages: WARNING
