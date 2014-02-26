@@ -3,15 +3,11 @@ module Etikett
     extend ActiveSupport::Concern
 
     included do
-
-      has_many :tag_mappings, as: :taggable, class_name: 'Etikett::TagMapping', dependent: :destroy
-      has_many :tags, through: :tag_mappings, class_name: 'Etikett::Tag'
-
     end
 
     def create_automated_tag
       settings = auto_tag_settings
-      t = master_tag_class.new(
+      t = "Etikett::#{self.class.get_klass_name}Tag".constantize.new(
           name: settings[:sid],
           nice: settings[:nice],
           generated: true,
@@ -19,7 +15,6 @@ module Etikett
       )
       t.create_valid_tag_name!
       t.save!
-      puts t.inspect
     end
 
     def update_automated_tag
@@ -38,14 +33,6 @@ module Etikett
       raise "master_tag block should give a hash with at least a :sid key." if settings[:sid].blank?
       settings
     end
-    # def navigate_to
-    #   t = Etikett::Tag.where(taggable: self)
-    #   t.get_path
-    # end
-
-    # def prime_tag
-    #   Etikett::Tag.joins(:tag_objects).find_by(etikett_tag_objects: {taggable_id: self, taggable_type: self.class, prime: true})
-    # end
 
 
     module ClassMethods
@@ -55,33 +42,33 @@ module Etikett
 
       def master_tag &block
         self.tag_config = block
-        klassname = self.name
+        klassname = self.get_klass_name
+        unformatted_name = self.name
         klass = "#{klassname}Tag"
         mapping_klass = "#{klass}Mapping"
-        inherited_class = Class.new(Etikett::Tag) do
-          relname = klassname.underscore
-          # create 'direct' relation
-          belongs_to relname.to_sym, foreign_key: :prime_id
-          define_method "#{relname}=" do raise "Don't call!" end
-          # make proper polymorphic association, too
-          belongs_to :prime, polymorphic: true
-          before_validation do
-            self.prime = self.send relname
+        unless Etikett.const_defined?(klass)
+          inherited_class = Class.new(Etikett::Tag) do
+            relname = klassname.underscore
+            # create 'direct' relation
+            belongs_to relname.to_sym, foreign_key: :prime_id, class_name: unformatted_name
+            define_method "#{relname}=" do raise "Don't call!" end
+            # make proper polymorphic association, too
+            belongs_to :prime, polymorphic: true
+            before_validation do
+              self.prime = self.send relname
+            end
+            validates_uniqueness_of :prime_id, scope: :prime_type
           end
-          validates_uniqueness_of :prime_id, scope: :prime_type
+
+          Etikett.const_set(klass, inherited_class)
         end
 
-        Etikett.const_set(klass, inherited_class)
-
-        define_method :master_tag_class do
-          inherited_class
+        unless Etikett.const_defined?(mapping_klass)
+          inherited_mapping_class = Class.new(Etikett::TagMapping) do
+            belongs_to klassname.underscore.to_sym
+          end
+          Etikett.const_set(mapping_klass, inherited_mapping_class)
         end
-
-        inherited_mapping_class = Class.new(Etikett::TagMapping) do
-          belongs_to klassname.underscore.to_sym
-        end
-        puts mapping_klass
-        Etikett.const_set(mapping_klass, inherited_mapping_class)
 
         has_one :master_tag, class_name: "Etikett::#{klass}", foreign_key: :prime_id
 
@@ -90,11 +77,22 @@ module Etikett
 
       end # master_tag
 
-      def has_many_tags name, class_name: nil
-        raise "association #{name} already exists" if self.reflect_on_association(name.to_sym).present?
+      def get_klass_name
+        self.name.gsub('::', '_')
+      end
+
+      def has_many_via_tags name, class_name: nil
+        if class_name
+          tag_class = "Etikett::#{class_name}Tag"
+          klass = class_name
+          # Object.const_get(class_name)
+        else
+          tag_class = "Etikett::#{klass}Tag"
+          klass = name.to_s.camelize.singularize.gsub('::', '_')
+        end
+        # return if defined?("Etikett::#{klass}TagMapping")
+        return if self.reflect_on_association(name.to_sym).present?
         # users_tags
-        klass = name.to_s.camelize.singularize
-        tag_class = "Etikett::#{klass}Tag"
         # target_tags_name = "#{name}_tags"
         singular = name.to_s.singularize
         through_name = "#{singular}_tags".to_sym
@@ -103,17 +101,23 @@ module Etikett
 
         has_many through_name, through: "#{singular}_tag_mappings".to_sym, class_name: "::Etikett::#{klass}Tag", source: :tag
 
-        has_many name, through: through_name, class_name: klass.to_s
-        # has_many target_tag_name.to_sym,
-        #   ->{joins(:tag_type).where("etikett_tag_types.name = '#{tag_type}'")},
-        #   class_name: 'Etikett::Tag', as: :taggable
-
-        # target_tag_objects_name = "#{name}_tag_objects"
-        # has_many target_tag_objects_name.to_sym,
-        #   ->{joins(:tag_type).where("etikett_tag_types.name = '#{tag_type}'")},
-        #   class_name: 'Etikett::TagObject', as: :taggable
-        # has_many target, through: target_tag_objects_name, as: :object
+        has_many name, through: through_name, class_name: klass.to_s, source: klass.downcase.to_sym
       end
+
+
+      def has_many_tags name = nil, typ: nil
+        if typ
+          raise "Can not have a general has_many_tags method and one with type #{typ}" if self.respond_to?(:tags)
+          @_uses_has_many_tags_with_typ = true
+          has_many "#{name}_tag_mappings".to_sym, ->{ where(typ: typ.downcase) }, class_name: "Etikett::TagMapping", dependent: :destroy, as: :taggable
+          has_many "#{name}_tags".to_sym, through: "#{name}_tag_mappings".to_sym, class_name: "Etikett::Tag", source: :tag
+        else
+          raise "Can not have a general has_many_tags method and one with type #{typ}" if @_uses_has_many_tags_with_typ
+          has_many :tag_mappings, as: :taggable, class_name: 'Etikett::TagMapping', dependent: :destroy
+          has_many :tags, through: :tag_mappings, class_name: 'Etikett::Tag'
+        end
+      end
+
     end # ClassMethods
   end # Taggable
 end # Etikett

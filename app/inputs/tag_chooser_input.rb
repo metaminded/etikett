@@ -1,11 +1,12 @@
 class TagChooserInput < SimpleForm::Inputs::Base
   def input
     data = {
-      class: object.class.name,
+      class: reflection.class_name,
       id: object.id,
       input_class: attribute_name,
       tag_chooser: true,
-      href: Rails.application.routes.url_helpers.etikett_tags_path
+      href: Rails.application.routes.url_helpers.etikett_tags_path,
+      new_tags_allowed: reflection.class_name == 'Etikett::Tag'
     }
     input_html_options[:value] = object.public_send(reflection.name).map do |t|
       {id: t.id, text: t.name, locked: false}

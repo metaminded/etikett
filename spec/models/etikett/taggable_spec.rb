@@ -3,9 +3,6 @@ require 'spec_helper'
 describe Etikett::Taggable do
   describe '#create_automated_tag' do
     it 'creates a prime tag for the saved object' do
-      config = Proc.new do
-        {sid: "#{self.product_no} #{self.title}"}
-      end
       Article.master_tag do
         {sid: "#{self.product_no} #{self.title}"}
       end
@@ -23,7 +20,6 @@ describe Etikett::Taggable do
 
   describe '#has_many_tags' do
     it 'defines two methods' do
-      User
       a = Article.new(title: 'foobar')
       Article.master_tag do
         {sid: "#{self.product_no} #{self.title}"}
@@ -31,13 +27,13 @@ describe Etikett::Taggable do
       a.save!
       expect(a).not_to respond_to(:user_tags)
       expect(a).not_to respond_to(:users)
-      Article.has_many_tags(:users)
+      Article.has_many_via_tags(:users)
       a.reload
       u = User.create!(first_name: 'florian', last_name: 'thomas')
       a.user_tags << u.master_tag
       a.save
-      expect(a).to respond_to(:user_tags)
-      expect(a).to respond_to(:users)
+      expect(a.user_tags.first).to eql u.master_tag
+      expect(a.users.first).to eql u
     end
   end
 end

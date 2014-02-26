@@ -8,6 +8,8 @@ module Etikett
 
     validates :name, uniqueness: true
 
+    attr_accessor :typ
+
     def create_valid_tag_name!
       i = 0
       until(valid? || !errors.include?(:name)) do
@@ -31,7 +33,7 @@ module Etikett
     end
 
     def self.search params, limit=10
-      query = Etikett::Tag
+      query = params[:class].try(:constantize) || Etikett::Tag
       if params[:category_id]
         query = query.joins(:tag_categories).where('etikett_tag_categories.id = ?', params[:category_id])
       end
@@ -55,9 +57,6 @@ module Etikett
       else
         etiketts = Etikett::Tag.all
       end
-      # if params[:tag_type_name]
-      #   etiketts = etiketts.joins(:tag_type).where('etikett_tag_types.name = ?', params[:tag_type_name])
-      # end
       etiketts
     end
 
