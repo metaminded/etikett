@@ -81,7 +81,7 @@ module Etikett
         self.name.gsub('::', '_')
       end
 
-      def has_many_via_tags name, class_name: nil
+      def has_many_via_tags name, class_name: nil, after_add: nil, after_remove: nil
         if class_name
           tag_class = "Etikett::#{class_name}Tag"
           klass = class_name
@@ -99,7 +99,9 @@ module Etikett
 
         has_many "#{singular}_tag_mappings".to_sym, as: :taggable, class_name: "Etikett::#{klass}TagMapping"
 
-        has_many through_name, through: "#{singular}_tag_mappings".to_sym, class_name: "::Etikett::#{klass}Tag", source: :tag
+        has_many through_name, through: "#{singular}_tag_mappings".to_sym,
+          class_name: "::Etikett::#{klass}Tag", source: :tag, after_add: after_add,
+          after_remove: after_remove
 
         has_many name, through: through_name, class_name: klass.to_s, source: klass.downcase.to_sym
       end
