@@ -1,5 +1,5 @@
 class TagChooserInput < SimpleForm::Inputs::Base
-  def input
+  def input(wrapper_options)
     data = {
       class: reflection.class_name,
       id: object.id,
