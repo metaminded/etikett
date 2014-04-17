@@ -37,6 +37,9 @@ module Etikett
       if params[:category_id]
         query = query.joins(:tag_categories).where('etikett_tag_categories.id = ?', params[:category_id])
       end
+      if params[:only_prime]
+        query = query.where("etikett_tags.prime_id IS NOT NULL")
+      end
       query = query.where("etikett_tags.name ILIKE '%#{params[:query]}%'").limit(limit)
       query
     end
@@ -61,7 +64,7 @@ module Etikett
     end
 
     def is_prime_for? obj_type, obj_id
-      prime_type == obj_type && prime_id == obj_id
+      prime_type && prime_type == obj_type && prime_id && prime_id == obj_id
     end
   end
 end
