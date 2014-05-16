@@ -6,7 +6,8 @@ class Etikett::TagsController < ApplicationController
         render json: @etiketts.collect{|e| {
           id: e.id,
           text: e.name,
-          locked: e.is_prime_for?(params[:taggable_type], params[:taggable_id])}
+          locked: e.is_prime_for?(params[:taggable_type], params[:taggable_id]),
+          klass: e.class.name.underscore.gsub(/\//, '_')}
         }, root: false
       }
     end

@@ -7,14 +7,16 @@ module Etikett
 
     def create_automated_tag
       settings = auto_tag_settings
-      t = "Etikett::#{self.class.get_klass_name}Tag".constantize.new(
-          name: settings[:sid],
-          nice: settings[:nice],
-          generated: true,
-          prime: self
-      )
-      t.create_valid_tag_name!
-      t.save!
+      if settings.present?
+        t = "Etikett::#{self.class.get_klass_name}Tag".constantize.new(
+            name: settings[:sid],
+            nice: settings[:nice],
+            generated: true,
+            prime: self
+        )
+        t.create_valid_tag_name!
+        t.save!
+      end
     end
 
     def update_automated_tag
@@ -30,6 +32,7 @@ module Etikett
     def auto_tag_settings
       raise "I ain't master-tagged!" unless self.class.tag_config
       settings = self.instance_eval &self.class.tag_config
+      return if settings.nil?
       raise "master_tag block should give a hash with at least a :sid key." if settings[:sid].blank?
       settings
     end

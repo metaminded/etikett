@@ -5,11 +5,12 @@ class TagChooserInput < SimpleForm::Inputs::Base
       id: object.id,
       input_class: attribute_name,
       tag_chooser: true,
+      multiple: true,
       href: Rails.application.routes.url_helpers.etikett_tags_path,
       new_tags_allowed: reflection.class_name == 'Etikett::Tag'
     }
     input_html_options[:value] = object.public_send(reflection.name).map do |t|
-      {id: t.id, text: t.name, locked: false}
+      {id: t.id, text: t.name, locked: false, klass: object.class.name.underscore.gsub(/\//, '_')}
     end.to_json
     input_html_options[:multiple] = true
     input_html_options[:data] = data
