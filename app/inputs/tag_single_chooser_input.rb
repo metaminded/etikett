@@ -7,11 +7,19 @@ class TagSingleChooserInput < SimpleForm::Inputs::Base
       multiple: false,
       tag_chooser: true,
       href: Rails.application.routes.url_helpers.etikett_tags_path,
-      new_tags_allowed: options[:new_tags_allowed] || false
+      new_tags_allowed: options[:new_tags_allowed] || false,
+      real_object_id: reflection.present?
     }
-    input_html_options[:value] = object.public_send(attribute_name).try do |t|
-      [{id: t.id, text: t.name, locked: false, klass: object.class.name.underscore.gsub(/\//, '_')}]
-    end.to_json
+    if reflection.present?
+      input_html_options[:value] = object.public_send(reflection.name).try do |t|
+        master_tag = t.master_tag
+        [{id: master_tag.id, text: master_tag.name, locked: false, klass: master_tag.class.name.underscore.gsub(/\//, '_')}]
+      end.to_json
+    else
+      input_html_options[:value] = object.public_send(attribute_name).try do |t|
+        [{id: t.id, text: t.name, locked: false, klass: object.class.name.underscore.gsub(/\//, '_')}]
+      end.to_json
+    end
     # input_html_options[:multiple] = false
     input_html_options[:data] = data
     input_html_options[:class] = ''
