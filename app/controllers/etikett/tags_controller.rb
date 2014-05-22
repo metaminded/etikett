@@ -4,7 +4,7 @@ class Etikett::TagsController < ApplicationController
     respond_to do |format|
       format.json {
         render json: @etiketts.collect{|e| {
-          id: params[:real_object_id] ? e.prime_id : e.id,
+          id: params[:real_object_id] == 'true' ? e.prime_id : e.id,
           text: e.name,
           locked: e.is_prime_for?(params[:taggable_type], params[:taggable_id]),
           klass: e.class.name.underscore.gsub(/\//, '_')}
