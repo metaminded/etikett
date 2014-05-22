@@ -21,16 +21,18 @@ module Etikett
 
     def update_automated_tag
       settings = auto_tag_settings
-      master_tag.assign_attributes(
-        name: settings[:sid],
-        nice: settings[:nice]
-      )
-      master_tag.create_valid_tag_name!
-      master_tag.save!
+      if settings.present?
+        master_tag.assign_attributes(
+          name: settings[:sid],
+          nice: settings[:nice]
+        )
+        master_tag.create_valid_tag_name!
+        master_tag.save!
+      end
     end
 
     def auto_tag_settings
-      raise "I ain't master-tagged!" unless self.class.tag_config
+      return if self.class.tag_config.nil?
       settings = self.instance_eval &self.class.tag_config
       return if settings.nil?
       raise "master_tag block should give a hash with at least a :sid key." if settings[:sid].blank?
