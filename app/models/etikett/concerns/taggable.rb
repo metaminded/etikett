@@ -102,7 +102,7 @@ module Etikett
         singular = name.to_s.singularize
         through_name = "#{singular}_tags".to_sym
 
-        has_many "#{singular}_tag_mappings".to_sym, as: :taggable, class_name: "Etikett::#{klass}TagMapping"
+        has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::#{klass}TagMapping")
 
         has_many through_name, through: "#{singular}_tag_mappings".to_sym,
           class_name: "::Etikett::#{klass}Tag", source: :tag, after_add: after_add,

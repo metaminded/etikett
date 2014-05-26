@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140221145440) do
+ActiveRecord::Schema.define(version: 20140526064138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20140221145440) do
     t.string   "taggable_type"
     t.integer  "tag_id"
     t.string   "type"
+    t.string   "typ"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -78,6 +79,10 @@ ActiveRecord::Schema.define(version: 20140221145440) do
     t.string   "type"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "lectures", force: true do |t|
+    t.string "title"
   end
 
   create_table "posts", force: true do |t|

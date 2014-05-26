@@ -36,4 +36,18 @@ describe Etikett::Taggable do
       expect(a.users.first).to eql u
     end
   end
+
+  describe '#has_many_via_tags' do
+    it 'works with multiple associations to the same class' do
+      l = Lecture.new(title: 'foobar')
+      student = User.create!(first_name: 'Some', last_name: 'Student')
+      docent = User.create!(first_name: 'Some', last_name: 'Prof')
+      l.student_tags << student.master_tag
+      l.docent_tags << docent.master_tag
+      l.save!
+      l.reload
+      expect(l.student_tags).to eq [student.master_tag]
+      expect(l.docent_tags).to eq [docent.master_tag]
+    end
+  end
 end
