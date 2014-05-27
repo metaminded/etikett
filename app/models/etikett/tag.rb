@@ -1,6 +1,6 @@
 module Etikett
   class Tag < ActiveRecord::Base
-    has_and_belongs_to_many :tag_categories
+    has_and_belongs_to_many :tag_categories, class_name: 'Etikett::TagCategory'
     has_many :tag_mappings, class_name: 'Etikett::TagMapping', dependent: :destroy
     has_many :tag_synonyms, dependent: :destroy
 
