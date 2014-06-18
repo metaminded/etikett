@@ -45,14 +45,14 @@ module Etikett
       attr_accessor :tag_config
       attr_accessor :taggable_automated_tag
 
-      def master_tag &block
+      def master_tag inherited_from: nil, &block
         self.tag_config = block
         klassname = self.get_klass_name
         unformatted_name = self.name
         klass = "#{klassname}Tag"
         mapping_klass = "#{klass}Mapping"
         unless Etikett.const_defined?(klass)
-          inherited_class = Class.new(Etikett::Tag) do
+          inherited_class = Class.new(inherited_from.try(:constantize) || Etikett::Tag) do
             relname = klassname.underscore
             # create 'direct' relation
             belongs_to relname.to_sym, foreign_key: :prime_id, class_name: unformatted_name
