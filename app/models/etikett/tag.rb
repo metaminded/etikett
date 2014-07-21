@@ -66,5 +66,9 @@ module Etikett
     def is_prime_for? obj_type, obj_id
       prime_type && prime_type == obj_type && prime_id && prime_id == obj_id
     end
+
+    def taggables
+      tag_mappings.includes(:taggable).map(&:taggable)
+    end
   end
 end

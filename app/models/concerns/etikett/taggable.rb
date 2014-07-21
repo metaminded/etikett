@@ -76,10 +76,14 @@ module Etikett
         end
 
         has_one :master_tag, class_name: "Etikett::#{klass}", foreign_key: :prime_id
-
+        define_method :tagged do
+          master_tag.taggables
+        end
+        define_method :master_tag_mappings do
+          master_tag.tag_mappings
+        end
         after_create :create_automated_tag
         after_update :update_automated_tag
-
       end # master_tag
 
       def get_klass_name
