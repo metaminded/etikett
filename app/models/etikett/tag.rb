@@ -8,6 +8,8 @@ module Etikett
 
     validates :name, uniqueness: true
 
+    default_scope -> { order(id: :asc) }
+
     attr_accessor :typ
 
     def create_valid_tag_name!
