@@ -80,5 +80,9 @@ module Etikett
     def taggables
       tag_mappings.includes(:taggable).map(&:taggable)
     end
+
+    def global?
+      false
+    end
   end
 end
