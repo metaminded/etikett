@@ -94,6 +94,7 @@ module Etikett
 
       def has_many_via_tags name, class_name: nil, after_add: nil, after_remove: nil, class_names: []
         raise "Can not be given `class_name` and `class_names` attributes" if class_name.present? && class_names.any?
+        self.allowed_etikett_classes ||= {}
         if class_name
           tag_class = "Etikett::#{class_name}Tag"
           klass = class_name
@@ -127,7 +128,6 @@ module Etikett
             self.public_send(through_name).map(&:prime).compact
           end
 
-          self.allowed_etikett_classes ||= {}
           self.allowed_etikett_classes[through_name.to_sym] ||= []
           class_names.each do |cn|
             self.allowed_etikett_classes[through_name.to_sym] << "Etikett::#{cn}Tag"
