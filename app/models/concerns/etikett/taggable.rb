@@ -45,6 +45,8 @@ module Etikett
       attr_accessor :tag_config
       attr_accessor :taggable_automated_tag
 
+      attr_accessor :allowed_etikett_classes
+
       def master_tag inherited_from: nil, &block
         self.tag_config = block
         klassname = self.get_klass_name
@@ -90,7 +92,8 @@ module Etikett
         self.name.gsub('::', '_')
       end
 
-      def has_many_via_tags name, class_name: nil, after_add: nil, after_remove: nil
+      def has_many_via_tags name, class_name: nil, after_add: nil, after_remove: nil, class_names: []
+        raise "Can not be given `class_name` and `class_names` attributes" if class_name.present? && class_names.any?
         if class_name
           tag_class = "Etikett::#{class_name}Tag"
           klass = class_name
@@ -106,17 +109,35 @@ module Etikett
         singular = name.to_s.singularize
         through_name = "#{singular}_tags".to_sym
 
-        has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::#{klass}TagMapping")
+        if class_names.empty?
+          has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::#{klass}TagMapping")
 
-        has_many through_name, through: "#{singular}_tag_mappings".to_sym,
-          class_name: "::Etikett::#{klass}Tag", source: :tag, after_add: after_add,
-          after_remove: after_remove
+          has_many through_name, through: "#{singular}_tag_mappings".to_sym,
+            class_name: "::Etikett::#{klass}Tag", source: :tag, after_add: after_add,
+            after_remove: after_remove
 
-        has_many name, through: through_name, class_name: klass.to_s, source: klass.downcase.to_sym
+          has_many name, through: through_name, class_name: klass.to_s, source: klass.downcase.to_sym
+        else
+          has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::TagMapping")
+          has_many through_name, through: "#{singular}_tag_mappings".to_sym,
+            class_name: "::Etikett::Tag", source: :tag, after_add: after_add,
+            after_remove: after_remove
+
+          define_method name.to_sym do
+            self.public_send(through_name).map(&:prime)
+          end
+
+          self.allowed_etikett_classes ||= {}
+          self.allowed_etikett_classes[through_name.to_sym] ||= []
+          class_names.each do |cn|
+            self.allowed_etikett_classes[through_name.to_sym] << "Etikett::#{cn}Tag"
+          end
+        end
       end
 
 
       def has_many_tags name = nil, typ: nil
+        self.allowed_etikett_classes ||= {}
         if typ
           raise "Can not have a general has_many_tags method and one with type #{typ}" if self.respond_to?(:tags)
           @_uses_has_many_tags_with_typ = true

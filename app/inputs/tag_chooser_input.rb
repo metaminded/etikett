@@ -1,7 +1,7 @@
 class TagChooserInput < SimpleForm::Inputs::Base
   def input(wrapper_options)
     data = {
-      class: reflection.class_name,
+      class: object.class.allowed_etikett_classes[reflection.name.to_sym].present? ? object.class.allowed_etikett_classes[reflection.name.to_sym] : reflection.class_name,
       id: object.id,
       input_class: attribute_name,
       tag_chooser: true,

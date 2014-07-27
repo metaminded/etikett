@@ -35,12 +35,20 @@ module Etikett
     end
 
     def self.search params, limit=10
-      query = params[:class].presence.try(:constantize) || Etikett::Tag
+      klass = params[:class].presence
+      if klass.respond_to? :each
+        query = Etikett::Tag
+      else
+        query = klass.try(:constantize) || Etikett::Tag
+      end
       if params[:category_id].present?
         query = query.joins(:tag_categories).where('etikett_tag_categories.id = ?', params[:category_id])
       end
       if params[:only_prime].present?
         query = query.where("etikett_tags.prime_id IS NOT NULL")
+      end
+      if klass.respond_to? :each
+        query = query.where(type: klass)
       end
       query = query.where("etikett_tags.name ILIKE '%#{params[:query]}%'").limit(limit)
       query
