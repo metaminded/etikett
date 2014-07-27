@@ -124,7 +124,7 @@ module Etikett
             after_remove: after_remove
 
           define_method name.to_sym do
-            self.public_send(through_name).map(&:prime)
+            self.public_send(through_name).map(&:prime).compact
           end
 
           self.allowed_etikett_classes ||= {}
