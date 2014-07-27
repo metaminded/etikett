@@ -1,6 +1,9 @@
 class Etikett::TagsController < ApplicationController
   def index
     @etiketts = Etikett::Tag.fetch(params)
+    if current_user.respond_to?(:allowed_to_use_tag?)
+      Array(@etiketts).select!{|tag| current_user.allowed_to_use_tag?(tag)}
+    end
     respond_to do |format|
       format.json {
         render json: @etiketts.collect{|e| {
