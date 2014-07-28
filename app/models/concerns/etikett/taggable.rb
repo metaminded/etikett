@@ -47,6 +47,10 @@ module Etikett
 
       attr_accessor :allowed_etikett_classes
 
+      def allowed_etikett_classes
+        @allowed_etikett_classes ||= {}
+      end
+
       def master_tag inherited_from: nil, &block
         self.tag_config = block
         klassname = self.get_klass_name
