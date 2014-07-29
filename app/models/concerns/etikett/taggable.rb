@@ -149,7 +149,7 @@ module Etikett
           has_many "#{name}_tags".to_sym, through: "#{name}_tag_mappings".to_sym, class_name: "Etikett::Tag", source: :tag
         else
           raise "Can not have a general has_many_tags method and one with type #{typ}" if @_uses_has_many_tags_with_typ
-          has_many :tag_mappings, as: :taggable, class_name: 'Etikett::TagMapping', dependent: :destroy
+          has_many :tag_mappings, ->{ where(typ: nil) }, as: :taggable, class_name: 'Etikett::TagMapping', dependent: :destroy
           has_many :tags, through: :tag_mappings, class_name: 'Etikett::Tag'
         end
       end
