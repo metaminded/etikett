@@ -21,7 +21,7 @@ module Etikett
 
     def update_automated_tag
       settings = auto_tag_settings
-      if settings.present?
+      if settings.present? && master_tag.present?
         master_tag.assign_attributes(
           name: settings[:sid],
           nice: settings[:nice]
