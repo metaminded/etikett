@@ -115,7 +115,7 @@ module Etikett
         through_name = "#{singular}_tags".to_sym
 
         if class_names.empty?
-          has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::#{klass}TagMapping")
+          has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::#{klass}TagMapping", inverse_of: :taggable)
 
           has_many through_name, through: "#{singular}_tag_mappings".to_sym,
             class_name: "::Etikett::#{klass}Tag", source: :tag, after_add: after_add,
