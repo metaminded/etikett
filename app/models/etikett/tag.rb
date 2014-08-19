@@ -40,7 +40,7 @@ module Etikett
       if params[:only_prime].present?
         query = query.where("etikett_tags.prime_id IS NOT NULL")
       end
-      query = query.where("etikett_tags.name ILIKE '%#{params[:query]}%'").limit(limit)
+      query = query.where("etikett_tags.name ILIKE ?", "%#{params[:query]}%").limit(limit)
       query
     end
 
