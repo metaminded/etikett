@@ -50,7 +50,7 @@ module Etikett
       if klass.respond_to? :each
         query = query.where(type: klass)
       end
-      query = query.where("etikett_tags.name ILIKE '%#{params[:query]}%'").limit(limit)
+      query = query.where("etikett_tags.name ILIKE ?", "%#{params[:query]}%").limit(limit)
       query
     end
 
