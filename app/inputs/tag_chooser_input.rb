@@ -10,7 +10,7 @@ class TagChooserInput < SimpleForm::Inputs::Base
       new_tags_allowed: reflection.class_name == 'Etikett::Tag'
     }
     input_html_options[:value] = object.public_send(reflection.name).map do |t|
-      {id: t.id, text: t.name, locked: false, klass: object.class.name.underscore.gsub(/\//, '_')}
+      {id: t.id, text: t.name, locked: false, klass: t.class.name.underscore.gsub(/\//, '_')}
     end.to_json
     input_html_options[:multiple] = true
     input_html_options[:data] = data
