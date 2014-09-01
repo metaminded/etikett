@@ -118,14 +118,14 @@ module Etikett
           has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::#{klass}TagMapping", inverse_of: :taggable)
 
           has_many through_name, through: "#{singular}_tag_mappings".to_sym,
-            class_name: "::Etikett::#{klass}Tag", source: :tag, after_add: after_add,
+            class_name: "Etikett::#{klass}Tag", source: :tag, after_add: after_add,
             after_remove: after_remove
 
           has_many name, through: through_name, class_name: klass.to_s, source: klass.downcase.to_sym
         else
           has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::TagMapping")
           has_many through_name, through: "#{singular}_tag_mappings".to_sym,
-            class_name: "::Etikett::Tag", source: :tag, after_add: after_add,
+            class_name: "Etikett::Tag", source: :tag, after_add: after_add,
             after_remove: after_remove
 
           define_method name.to_sym do

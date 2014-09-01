@@ -47,7 +47,7 @@ module Etikett
       if params[:only_prime].present?
         query = query.where("etikett_tags.prime_id IS NOT NULL")
       end
-      if klass.respond_to? :each
+      if klass.respond_to?(:each) && (klass.length > 1 || klass[0] != 'Etikett::Tag')
         query = query.where(type: klass)
       end
       query = query.where("etikett_tags.name ILIKE ?", "%#{params[:query]}%").limit(limit)
