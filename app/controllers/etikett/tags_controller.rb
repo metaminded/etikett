@@ -10,7 +10,8 @@ class Etikett::TagsController < ApplicationController
           id: params[:real_object_id] == 'true' ? e.prime_id : e.id,
           text: e.name,
           locked: e.is_prime_for?(params[:taggable_type], params[:taggable_id]),
-          klass: e.class.name.underscore.gsub(/\//, '_')}
+          klass: e.class.name.underscore.gsub(/\//, '_'),
+          meta: e.try(:prime).try(:etikett_meta_data, params[:real_object_id] == 'true')}
         }, root: false
       }
     end
