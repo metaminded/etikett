@@ -1,7 +1,7 @@
 class TagSingleChooserInput < SimpleForm::Inputs::Base
   def input(wrapper_options)
     data = {
-      class: options[:class_name],
+      class: Array(options[:class_names]).presence || options[:class_name],
       id: object.id,
       input_class: attribute_name,
       multiple: false,
