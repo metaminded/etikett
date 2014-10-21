@@ -81,7 +81,7 @@ module Etikett
           Etikett.const_set(mapping_klass, inherited_mapping_class)
         end
 
-        has_one :master_tag, class_name: "Etikett::#{klass}", foreign_key: :prime_id
+        has_one :master_tag, class_name: "Etikett::#{klass}", foreign_key: :prime_id, dependent: :destroy
         define_method :tagged do
           master_tag.taggables
         end
