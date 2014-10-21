@@ -50,4 +50,14 @@ describe Etikett::Taggable do
       expect(l.docent_tags).to eq [docent.master_tag]
     end
   end
+
+  describe '#dependent destroy' do
+    it 'destroys the tag after the model is destroyed' do
+      l = Lecture.create!(title: 'foobar')
+      master_tag_id = l.master_tag.id
+      expect(l.master_tag.present?).to eq true
+      l.destroy!
+      expect(Etikett::Tag.where(id: master_tag_id).count).to eq 0
+    end
+  end
 end
