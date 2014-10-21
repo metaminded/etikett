@@ -15,20 +15,10 @@ ActiveRecord::Schema.define(version: 20140526064138) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "pg_trgm"
 
   create_table "articles", force: true do |t|
     t.integer  "product_no"
     t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "etikett_searchables", force: true do |t|
-    t.integer  "ref_id"
-    t.string   "ref_type"
-    t.tsvector "short"
-    t.tsvector "fulltext"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
