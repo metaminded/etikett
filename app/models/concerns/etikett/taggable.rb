@@ -68,7 +68,7 @@ module Etikett
             before_validation do
               self.prime = self.send relname
             end
-            validates_uniqueness_of :prime_id, scope: :prime_type
+            validates :prime_id, uniqueness: {scope: :prime_type }, on: :create
           end
 
           Etikett.const_set(klass, inherited_class)
