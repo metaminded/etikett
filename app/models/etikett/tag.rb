@@ -6,7 +6,7 @@ module Etikett
 
     belongs_to :prime, polymorphic: true
 
-    validates :name, uniqueness: true
+    validates :name, uniqueness: true, if: :name_changed?
 
     default_scope -> { order(id: :asc) }
 
