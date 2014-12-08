@@ -60,4 +60,22 @@ describe Etikett::Taggable do
       expect(Etikett::Tag.where(id: master_tag_id).count).to eq 0
     end
   end
+
+  describe '#belongs_to_tag' do
+    it 'creates a 1-x association via a tag' do
+      a = Article.new(title: 'foobar')
+      Article.master_tag do
+        {sid: "#{self.product_no} #{self.title}"}
+      end
+      a.save!
+      expect(a).to respond_to(:author_tag_mapping)
+      expect(a).to respond_to(:author_tag)
+      expect(a).to respond_to(:author)
+      u = User.create!(first_name: 'Luke', last_name: 'Skywalker')
+      a.author_tag = u.master_tag
+      a.save!
+      a.reload
+      expect(a.author).to eq(u)
+    end
+  end
 end

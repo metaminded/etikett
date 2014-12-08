@@ -154,6 +154,40 @@ module Etikett
         end
       end
 
+      def belongs_to_tag name, class_name: nil, after_add: nil, after_remove: nil, class_names: []
+        raise "Can not be given `class_name` and `class_names` attributes" if class_name.present? && class_names.any?
+        self.allowed_etikett_classes ||= {}
+        if class_name
+          tag_class = "Etikett::#{class_name}Tag"
+          klass = class_name
+        else
+          tag_class = "Etikett::#{klass}Tag"
+          klass = name.to_s.camelize.singularize.gsub('::', '_')
+        end
+        return if self.reflect_on_association(name.to_sym).present?
+        singular = name.to_s.singularize
+        through_name = "#{singular}_tag".to_sym
+
+        if class_names.empty?
+          has_one("#{singular}_tag_mapping".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::#{klass}TagMapping", inverse_of: :taggable)
+          has_one "#{singular}_tag".to_sym, through: "#{singular}_tag_mapping".to_sym, class_name: "Etikett::#{klass}Tag", source: :tag
+          has_one name.to_sym, through: "#{singular}_tag".to_sym, class_name: klass.to_s, source: klass.downcase.to_sym
+        else
+          has_one("#{singular}_tag_mapping".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::TagMapping")
+          has_one through_name, through: "#{singular}_tag_mapping".to_sym,
+            class_name: "Etikett::Tag", source: :tag
+
+          define_method name.to_sym do
+            self.public_send(through_name).try(:prime)
+          end
+
+          self.allowed_etikett_classes[through_name.to_sym] ||= []
+          class_names.each do |cn|
+            self.allowed_etikett_classes[through_name.to_sym] << "Etikett::#{cn}Tag"
+          end
+        end
+      end
+
     end # ClassMethods
   end # Taggable
 end # Etikett

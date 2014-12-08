@@ -15,6 +15,8 @@ class TagSingleChooserInput < SimpleForm::Inputs::Base
         master_tag = obj.master_tag
         [{id: obj.id, text: master_tag.name, locked: false, klass: master_tag.class.name.underscore.gsub(/\//, '_')}]
       end.to_json
+    elsif object.is_a? Etikett::Tag
+      input_html_options[:value] = [{id: object.id, text: object.name, klass: object.class.name.underscore.gsub(/\//, '_')}].to_json
     else
       input_html_options[:value] = object.public_send(attribute_name).try do |t|
         [{id: t.id, text: t.name, locked: false, klass: object.class.name.underscore.gsub(/\//, '_')}]
