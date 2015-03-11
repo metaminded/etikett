@@ -6,7 +6,7 @@ class TagSingleChooserInput < SimpleForm::Inputs::Base
       input_class: attribute_name,
       multiple: false,
       tag_chooser: true,
-      href: Rails.application.routes.url_helpers.etikett_tags_path,
+      href: Etikett::Engine.routes.url_helpers.etikett_tags_path,
       new_tags_allowed: options[:new_tags_allowed] || false,
       real_object_id: reflection.present? && reflection.belongs_to?
     }

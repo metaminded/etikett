@@ -8,7 +8,7 @@ class TagChooserInput < SimpleForm::Inputs::Base
       input_class: attribute_name,
       tag_chooser: true,
       multiple: true,
-      href: Rails.application.routes.url_helpers.etikett_tags_path,
+      href: Etikett::Engine.routes.url_helpers.etikett_tags_path,
       new_tags_allowed: Array(allowed_classes) == ['Etikett::Tag']
     }
     input_html_options[:value] = object.public_send(reflection.name).map do |t|
