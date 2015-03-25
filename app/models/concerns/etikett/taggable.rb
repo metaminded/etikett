@@ -113,6 +113,8 @@ module Etikett
         # target_tags_name = "#{name}_tags"
         singular = name.to_s.singularize
         through_name = "#{singular}_tags".to_sym
+        klassname = self.get_klass_name.underscore
+
 
         if class_names.empty?
           has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)},
@@ -123,6 +125,21 @@ module Etikett
             after_remove: after_remove
 
           has_many name, through: through_name, class_name: klass.to_s, source: klass.downcase.to_sym
+
+          const_cn = klass.constantize
+          mapping_method = "#{singular}_#{klassname}_mappings".to_sym
+          inverse_method = "#{singular}_#{klassname.pluralize}".to_sym
+
+          if !const_cn.respond_to?(mapping_method) && !const_cn.respond_to?(inverse_method)
+            const_cn.send :define_method, "#{singular}_#{klassname}_mappings".to_sym, ->(){
+              self.master_tag.tag_mappings.where(typ: name.downcase)
+            }
+
+            const_cn.send :define_method, "#{singular}_#{klassname.pluralize}".to_sym, ->(){
+              self.public_send("#{singular}_#{klassname}_mappings".to_sym).map(&:taggable).compact
+            }
+          end
+
         else
           has_many("#{singular}_tag_mappings".to_sym, ->{ where(typ: name.downcase)}, as: :taggable, class_name: "Etikett::TagMapping")
           has_many through_name, through: "#{singular}_tag_mappings".to_sym,
@@ -137,6 +154,19 @@ module Etikett
           self.allowed_etikett_classes[through_name.to_sym] ||= []
           class_names.each do |cn|
             self.allowed_etikett_classes[through_name.to_sym] << "Etikett::#{cn}Tag"
+
+            const_cn = cn.constantize
+            mapping_method = "#{singular}_#{klassname}_mappings".to_sym
+            inverse_method = "#{singular}_#{klassname.pluralize}".to_sym
+
+            if !const_cn.respond_to?(mapping_method) && !const_cn.respond_to?(inverse_method)
+              cn.constantize.send :define_method, mapping_method, ->(){
+                self.master_tag.tag_mappings.where(typ: name.downcase)
+              }
+              cn.constantize.send :define_method, inverse_method, ->(){
+                self.public_send("#{singular}_#{klassname}_mappings".to_sym).map(&:taggable).compact
+              }
+            end
           end
         end
       end

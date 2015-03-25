@@ -7,4 +7,5 @@ class Lecture < ActiveRecord::Base
 
   has_many_via_tags :students, class_name: 'User'
   has_many_via_tags :docents, class_name: 'User'
+  has_many_via_tags :texts, class_names: ['Article', 'Post']
 end
