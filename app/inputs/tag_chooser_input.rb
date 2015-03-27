@@ -9,7 +9,8 @@ class TagChooserInput < SimpleForm::Inputs::Base
       tag_chooser: true,
       multiple: true,
       href: Etikett::Engine.routes.url_helpers.etikett_tags_path,
-      new_tags_allowed: Array(allowed_classes) == ['Etikett::Tag']
+      new_tags_allowed: Array(allowed_classes) == ['Etikett::Tag'],
+      skip_permission_check: false || options[:skip_permission_check].presence
     }
     input_html_options[:value] = object.public_send(reflection.name).map do |t|
       {id: t.id, text: t.name, locked: false, klass: t.class.name.underscore.gsub(/\//, '_')}
