@@ -8,7 +8,8 @@ class TagSingleChooserInput < SimpleForm::Inputs::Base
       tag_chooser: true,
       href: Etikett::Engine.routes.url_helpers.etikett_tags_path,
       new_tags_allowed: options[:new_tags_allowed] || false,
-      real_object_id: reflection.present? && reflection.belongs_to?
+      real_object_id: reflection.present? && reflection.belongs_to?,
+      skip_permission_check: false || options[:skip_permission_check].presence
     }
     if data[:real_object_id]
       input_html_options[:value] = object.public_send(reflection.name).try do |obj|
