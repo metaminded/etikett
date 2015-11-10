@@ -8,7 +8,7 @@ class Etikett::TagsController < ApplicationController
       format.json {
         render json: @etiketts.collect{|e| {
           id: params[:real_object_id] == 'true' ? e.prime_id : e.id,
-          text: e.name,
+          text: (e.nice.presence || e.name),
           locked: e.is_prime_for?(params[:taggable_type], params[:taggable_id]),
           klass: e.class.name.underscore.gsub(/\//, '_'),
           meta: e.try(:prime).try(:etikett_meta_data, params[:real_object_id] == 'true')}
