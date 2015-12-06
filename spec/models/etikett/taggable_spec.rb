@@ -49,6 +49,51 @@ describe Etikett::Taggable do
       expect(l.student_tags).to eq [student.master_tag]
       expect(l.docent_tags).to eq [docent.master_tag]
     end
+
+    it 'creates the inverted association' do
+      l = Lecture.new(title: 'foobar')
+      l2 = Lecture.new(title: 'a different lecture')
+      student = User.create!(first_name: 'Some', last_name: 'Student')
+      docent = User.create!(first_name: 'Some', last_name: 'Prof')
+      l.student_tags << student.master_tag
+      l.docent_tags << docent.master_tag
+      l2.docent_tags << docent.master_tag
+      l.save!
+      l2.save!
+      l.reload
+      expect(docent.respond_to?(:docent_lecture_mappings)).to be_truthy
+      expect(docent.docent_lecture_mappings).to match_array([l.docent_tag_mappings, l2.docent_tag_mappings].flatten)
+      expect(student.docent_lecture_mappings).to be_empty
+
+      expect(docent.respond_to?(:student_lecture_mappings)).to be_truthy
+      expect(docent.student_lecture_mappings).to be_empty
+      expect(student.student_lecture_mappings).to match_array(l.student_tag_mappings)
+
+      expect(docent.respond_to?(:docent_lectures)).to be_truthy
+      expect(docent.docent_lectures).to match_array([l, l2])
+      expect(student.docent_lectures).to be_empty
+
+      expect(docent.respond_to?(:student_lectures)).to be_truthy
+      expect(docent.student_lectures).to be_empty
+      expect(student.student_lectures).to match_array([l])
+    end
+
+    it 'creates inverted associations for given class_names' do
+      l = Lecture.new(title: 'some lecture')
+      l2 = Lecture.new(title: 'some different lecture')
+      article = Article.create!(title: 'HDTV')
+      post = Post.create!(title: 'Hello', comment: 'World!')
+      l.text_tags << post.master_tag
+      l.text_tags << article.master_tag
+      l2.text_tags << article.master_tag
+      l.save!
+      l2.save!
+
+      expect(article.respond_to?(:text_lectures)).to be_truthy
+      expect(post.respond_to?(:text_lectures)).to be_truthy
+      expect(article.text_lectures).to match_array([l, l2])
+      expect(post.text_lectures).to match_array([l])
+    end
   end
 
   describe '#dependent destroy' do
